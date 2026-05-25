@@ -31,7 +31,7 @@ pipeline {
                 --deployment-group-name noor-deployment-group \
                 --s3-location bucket=noor1-bucket,key=codedeploy.zip,bundleType=zip \
                 --ignore-application-stop-failures \
-                --region ap-south-1
+                --region ap-south-2
                 '''
             }
         }
