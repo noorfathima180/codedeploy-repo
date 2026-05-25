@@ -1,0 +1,34 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Clone') {
+            steps {
+                git branch: 'main', url: 'https://github.com/noorfathima180/codedeploy-repo.git'
+            }
+        }
+
+        stage('Package') {
+            steps {
+                sh 'zip -r app.zip .'
+            }
+        }
+
+        stage('Upload to S3') {
+            steps {
+                sh 'aws s3 cp app.zip s3://noor1-bucket/app.zip'
+            }
+        }
+
+        stage('Deploy using CodeDeploy') {
+            steps {
+                sh '''
+                aws deploy create-deployment \
+                --application-name noor-codedeploy \
+                --deployment-group-name noor-deployment-group \
+                --s3-location bucket=noor1-bucket,key=app.zip,bundleType=zip
+                '''
+            }
+        }
+    }
+}
